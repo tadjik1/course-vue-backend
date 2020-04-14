@@ -11,6 +11,7 @@ import { EntityManager, EntityRepository } from 'mikro-orm';
 import { UserEntity } from '../users/user.entity';
 import { AbstractSqlConnection } from 'mikro-orm/dist/connections/AbstractSqlConnection';
 import { AgendaItemEntity } from './entities/agenda-item.entity';
+import { CreateMeetupDto } from './dto/create-meetup.dto';
 
 @Injectable()
 export class MeetupsService {
@@ -64,6 +65,19 @@ export class MeetupsService {
     }
     return new MeetupWithAgendaDto(meetup);
   }
+
+  async createMeetup(
+    meetupDto: CreateMeetupDto,
+    organizer: UserEntity,
+  ): Promise<MeetupWithAgendaDto> {
+    this.em.merge(organizer);
+    const meetup = new MeetupEntity(meetupDto);
+    const meetupEvents = meetupDto.agenda.map(
+      (agendaDto) => new AgendaItemEntity(agendaDto),
+    );
+    meetup.agenda.set(meetupEvents);
+    meetup.organizer = organizer;
+    await this.meetupsRepository.persistAndFlush(meetup);
     return new MeetupWithAgendaDto(meetup);
   }
   }

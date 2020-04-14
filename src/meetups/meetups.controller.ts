@@ -23,6 +23,7 @@ import { MeetupDto } from './dto/meetup.dto';
 import { MeetupWithAgendaDto } from './dto/meetup-with-agenda.dto';
 import { UserEntity } from '../users/user.entity';
 import { ReqUser } from '../common/decorators/user.decorator';
+import { CreateMeetupDto } from './dto/create-meetup.dto';
 
 @ApiTags('Meetups')
 @Controller('meetups')
@@ -49,5 +50,15 @@ export class MeetupsController {
     return this.meetupService.findById(meetupId, user);
   }
 
+  @Post()
+  @UseGuards(AuthenticatedGuard)
+  @ApiSecurity('cookie-session')
+  @ApiOperation({ summary: 'Создание нового митапа' })
+  async createMeetup(
+    @Body() meetupDto: CreateMeetupDto,
+    @ReqUser() user: UserEntity,
+  ): Promise<MeetupWithAgendaDto> {
+    return this.meetupService.createMeetup(meetupDto, user);
+  }
 
 }
