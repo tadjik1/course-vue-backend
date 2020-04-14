@@ -1,4 +1,69 @@
-import { Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  NotImplementedException,
+} from '@nestjs/common';
+import { MeetupWithAgendaDto } from './dto/meetup-with-agenda.dto';
+import { MeetupDto } from './dto/meetup.dto';
+import { InjectRepository } from 'nestjs-mikro-orm';
+import { MeetupEntity } from './entities/meetup.entity';
+import { EntityManager, EntityRepository } from 'mikro-orm';
+import { UserEntity } from '../users/user.entity';
+import { AbstractSqlConnection } from 'mikro-orm/dist/connections/AbstractSqlConnection';
+import { AgendaItemEntity } from './entities/agenda-item.entity';
 
 @Injectable()
-export class MeetupsService {}
+export class MeetupsService {
+  constructor(
+    private readonly em: EntityManager,
+
+    @InjectRepository(MeetupEntity)
+    private readonly meetupsRepository: EntityRepository<MeetupEntity>,
+  ) {}
+
+  async findAll(user?: UserEntity): Promise<MeetupDto[]> {
+    const meetups = user
+      ? await this.getMeetupsForUser(user)
+      : await this.meetupsRepository.findAll();
+
+    await this.em.populate(meetups, 'organizer');
+    return meetups.map((meetup) => new MeetupDto(meetup));
+  }
+
+  private async getMeetupsForUser(user: UserEntity): Promise<MeetupEntity[]> {
+    const knex = (this.em.getConnection() as AbstractSqlConnection).getKnex();
+    const result = await knex
+      .select(
+        '*',
+        knex.raw('meetups.organizer_id = ? as organizing', [user.id]),
+        knex('participation')
+          .count('*')
+          .where('user_id', user.id)
+          .andWhere('meetup_id', knex.ref('id').withSchema('meetups'))
+          .as('attending'),
+      )
+      .from('meetups');
+    return result.map((meetup) => this.meetupsRepository.map(meetup));
+  }
+
+  async findById(
+    meetupId: number,
+    user?: UserEntity,
+  ): Promise<MeetupWithAgendaDto> {
+    const meetup = await this.meetupsRepository.findOne(meetupId, true);
+    if (!meetup) {
+      throw new NotFoundException();
+    }
+    if (user) {
+      if (meetup.organizer.id === user.id) {
+        meetup.organizing = true;
+      }
+      if (meetup.participants.contains(user)) {
+        meetup.attending = true;
+      }
+    }
+    return new MeetupWithAgendaDto(meetup);
+  }
+    return new MeetupWithAgendaDto(meetup);
+  }
+  }
