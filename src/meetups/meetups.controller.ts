@@ -61,6 +61,16 @@ export class MeetupsController {
     return this.meetupService.createMeetup(meetupDto, user);
   }
 
+  @Put(':meetupId')
+  @UseGuards(AuthenticatedGuard)
+  @ApiOperation({ summary: 'Обновление митапа' })
+  @ApiSecurity('cookie-session')
+  async updateMeetup(
+    @Param('meetupId', ParseIntPipe) meetupId: number,
+    @Body() meetupWithAgendaDto: MeetupWithAgendaDto,
+  ): Promise<MeetupWithAgendaDto> {
+    return this.meetupService.updateMeetup(meetupId, meetupWithAgendaDto);
+  }
 
   @Delete(':meetupId')
   @UseGuards(AuthenticatedGuard)

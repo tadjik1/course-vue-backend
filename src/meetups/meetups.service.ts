@@ -81,6 +81,14 @@ export class MeetupsService {
     return new MeetupWithAgendaDto(meetup);
   }
 
+  async updateMeetup(
+    meetupId: number,
+    meetup: MeetupWithAgendaDto,
+  ): Promise<MeetupWithAgendaDto> {
+    throw new NotImplementedException();
+    return meetup;
+  }
+
   async deleteMeetup(meetupId: number) {
     const meetup = await this.meetupsRepository.findOne(meetupId);
     return this.meetupsRepository.removeAndFlush(meetup);
