@@ -85,4 +85,27 @@ export class MeetupsService {
     const meetup = await this.meetupsRepository.findOne(meetupId);
     return this.meetupsRepository.removeAndFlush(meetup);
   }
+
+  async attendMeetup(meetupId: number, user: UserEntity) {
+    this.em.merge(user);
+    const meetup = await this.meetupsRepository.findOne(meetupId, true);
+    if (!meetup) {
+      throw new NotFoundException();
+    }
+    meetup.participants.add(user);
+    return this.meetupsRepository.flush();
   }
+
+  async leaveMeetup(meetupId: number, user: UserEntity) {
+    this.em.merge(user);
+    const meetup = await this.meetupsRepository.findOne(meetupId, true);
+    if (!meetup) {
+      throw new NotFoundException();
+    }
+    if (meetup.participants.contains(user)) {
+      meetup.participants.remove(user);
+    }
+
+    return this.meetupsRepository.flush();
+  }
+}

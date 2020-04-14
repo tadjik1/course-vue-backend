@@ -69,4 +69,29 @@ export class MeetupsController {
   async deleteMeetup(@Param('meetupId', ParseIntPipe) meetupId: number) {
     return this.meetupService.deleteMeetup(meetupId);
   }
+
+  @Put(':meetupId/participation')
+  @ApiOperation({
+    summary: 'Добавление текущего пользователя в список участников митапа',
+  })
+  @ApiSecurity('cookie-session')
+  async attendMeetup(
+    @Param('meetupId', ParseIntPipe) meetupId: number,
+    @ReqUser() user: UserEntity,
+  ) {
+    return this.meetupService.attendMeetup(meetupId, user);
+  }
+
+  @Delete(':meetupId/participation')
+  @UseGuards(AuthenticatedGuard)
+  @ApiOperation({
+    summary: 'Удаление текущего пользователя в список участников митапа',
+  })
+  @ApiSecurity('cookie-session')
+  async leaveMeetup(
+    @Param('meetupId', ParseIntPipe) meetupId: number,
+    @ReqUser() user: UserEntity,
+  ) {
+    return this.meetupService.leaveMeetup(meetupId, user);
+  }
 }
