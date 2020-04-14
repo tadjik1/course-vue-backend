@@ -1,9 +1,10 @@
+import path from 'path';
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import passport from 'passport';
 import session from 'express-session';
-import FileStoreFactory from 'session-file-store';
+import SQLiteStoreFactory from 'connect-sqlite3';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
@@ -20,7 +21,11 @@ async function bootstrap() {
       resave: false,
       saveUninitialized: false,
       unset: 'destroy',
-      store: new (FileStoreFactory(session))(),
+      store: new (SQLiteStoreFactory(session))({
+        db: 'sessions.sqlite3',
+        dir: path.join(__dirname, '..'),
+        concurrentDB: true,
+      }),
     }),
   );
   app.use(passport.initialize());
