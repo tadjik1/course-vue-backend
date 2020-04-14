@@ -47,7 +47,6 @@ export class AuthController {
     @ReqUser() user: UserEntity,
     @Body() loginDto: LoginDto,
   ): Promise<UserDto> {
-    console.log('login', typeof user, user);
     return new UserDto(user);
   }
 

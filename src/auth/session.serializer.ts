@@ -19,7 +19,6 @@ export class SessionSerializer extends PassportSerializer {
     done: (err: Error, payload: any) => void,
   ): Promise<any> {
     const user = await this.userService.findUserById(payload);
-    console.log('deserialize', typeof user);
     if (user !== null) {
       done(null, user);
     } else {
