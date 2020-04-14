@@ -80,4 +80,9 @@ export class MeetupsService {
     await this.meetupsRepository.persistAndFlush(meetup);
     return new MeetupWithAgendaDto(meetup);
   }
+
+  async deleteMeetup(meetupId: number) {
+    const meetup = await this.meetupsRepository.findOne(meetupId);
+    return this.meetupsRepository.removeAndFlush(meetup);
+  }
   }

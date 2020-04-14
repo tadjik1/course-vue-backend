@@ -61,4 +61,12 @@ export class MeetupsController {
     return this.meetupService.createMeetup(meetupDto, user);
   }
 
+
+  @Delete(':meetupId')
+  @UseGuards(AuthenticatedGuard)
+  @ApiOperation({ summary: 'Удаление митапа' })
+  @ApiSecurity('cookie-session')
+  async deleteMeetup(@Param('meetupId', ParseIntPipe) meetupId: number) {
+    return this.meetupService.deleteMeetup(meetupId);
+  }
 }
