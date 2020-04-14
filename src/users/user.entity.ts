@@ -6,6 +6,7 @@ import {
   Property,
   Unique,
 } from 'mikro-orm';
+import { MeetupEntity } from '../meetups/entities/meetup.entity';
 import { RegisterUserDto } from '../auth/dto/register-user.dto';
 import { createHash } from 'crypto';
 
@@ -23,6 +24,13 @@ export class UserEntity {
 
   @Property()
   password!: string;
+
+  @OneToMany(
+    () => MeetupEntity,
+    (meetup) => meetup.organizer,
+  )
+  meetups = new Collection<MeetupEntity>(this);
+
   @Property({ persist: false })
   get avatar() {
     if (!this.email) {
