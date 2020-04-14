@@ -1,6 +1,6 @@
 {
-  "name": "meetups-server",
-  "version": "0.0.1",
+  "name": "course-vue-backend",
+  "version": "0.15.0",
   "description": "API backend for Meetups - learn.javascript.ru VueJS Course",
   "author": "Grigorii K. Shartsev <me@shgk.me>",
   "private": true,
