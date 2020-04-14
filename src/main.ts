@@ -11,6 +11,8 @@ async function bootstrap() {
 
   app.setGlobalPrefix('api');
 
+  app.enableCors();
+
   app.use(
     session({
       secret: 'secret',
