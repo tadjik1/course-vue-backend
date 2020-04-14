@@ -24,11 +24,12 @@ export class AgendaItemEntity {
       'break',
       'coffee',
       'closing',
+      'afterparty',
       'other',
     ],
   })
   @Property()
-  type!: 'registration' | 'opening' | 'talk' | 'coffee' | 'closing' | 'other';
+  type!: 'registration' | 'opening' | 'talk' | 'break' | 'coffee' | 'closing' | 'afterparty' | 'other';
 
   @Property()
   title?: string;

@@ -6,14 +6,16 @@ export class MeetupAgendaItemDto {
   readonly startsAt: string;
   readonly endsAt: string;
   @ApiProperty({
-    enum: ['registration', 'opening', 'talk', 'coffee', 'closing', 'other'],
+    enum: ['registration', 'opening', 'talk', 'break', 'coffee', 'closing', 'afterparty', 'other'],
   })
   readonly type:
     | 'registration'
     | 'opening'
     | 'talk'
+    | 'break'
     | 'coffee'
     | 'closing'
+    | 'afterparty'
     | 'other';
   readonly title?: string;
   readonly description?: string;
