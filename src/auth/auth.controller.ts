@@ -45,7 +45,7 @@ export class AuthController {
   })
   async login(
     @ReqUser() user: UserEntity,
-    @Body() loginDto: LoginDto,
+    @Body() loginDto: LoginDto, // eslint-disable-line @typescript-eslint/no-unused-vars
   ): Promise<UserDto> {
     return new UserDto(user);
   }

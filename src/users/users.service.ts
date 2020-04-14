@@ -20,7 +20,7 @@ export class UsersService {
   }
 
   async createUser(registerUserDto: RegisterUserDto) {
-    let user = new UserEntity(registerUserDto);
+    const user = new UserEntity(registerUserDto);
     await this.usersRepository.persistAndFlush(user);
     return user;
   }

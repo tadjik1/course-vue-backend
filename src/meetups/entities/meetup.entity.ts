@@ -9,7 +9,6 @@ import {
 } from 'mikro-orm';
 import { UserEntity } from '../../users/user.entity';
 import { AgendaItemEntity } from './agenda-item.entity';
-import { MeetupDto } from '../dto/meetup.dto';
 import { CreateMeetupDto } from '../dto/create-meetup.dto';
 
 @Entity({ tableName: 'meetups' })

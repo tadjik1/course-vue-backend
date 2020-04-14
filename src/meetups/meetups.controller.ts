@@ -4,7 +4,6 @@ import {
   Delete,
   Get,
   Inject,
-  NotImplementedException,
   Param,
   ParseIntPipe,
   Post,
