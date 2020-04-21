@@ -11,8 +11,8 @@ export class UsersService {
     private readonly usersRepository: EntityRepository<UserEntity>,
   ) {}
 
-  async findUserById(userId) {
-    return this.usersRepository.findOne({ id: userId });
+  async findUserById(userId: number) {
+    return this.usersRepository.findOne(userId);
   }
 
   async findUserByEmail(email) {
