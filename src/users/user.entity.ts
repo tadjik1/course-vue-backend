@@ -9,6 +9,8 @@ import {
 import { MeetupEntity } from '../meetups/entities/meetup.entity';
 import { RegisterUserDto } from '../auth/dto/register-user.dto';
 import { createHash } from 'crypto';
+import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
+import { Exclude, Expose } from 'class-transformer';
 
 @Entity({ tableName: 'users' })
 export class UserEntity {
@@ -23,8 +25,12 @@ export class UserEntity {
   email!: string;
 
   @Property()
+  @ApiHideProperty()
+  @Exclude()
   password!: string;
 
+  @ApiHideProperty()
+  @Exclude()
   @OneToMany(
     () => MeetupEntity,
     (meetup) => meetup.organizer,
@@ -32,7 +38,9 @@ export class UserEntity {
   meetups = new Collection<MeetupEntity>(this);
 
   @Property({ persist: false })
-  get avatar() {
+  @Expose()
+  @ApiProperty()
+  get avatar(): string {
     if (!this.email) {
       return undefined;
     }

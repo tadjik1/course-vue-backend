@@ -6,6 +6,8 @@ import {
   Inject,
   Req,
   Get,
+  UseInterceptors,
+  ClassSerializerInterceptor,
 } from '@nestjs/common';
 import { LoginDto } from './dto/login.dto';
 import { LoginGuard } from '../common/guards/login.guard';
@@ -14,16 +16,17 @@ import { UsersService } from '../users/users.service';
 import {
   ApiOkResponse,
   ApiOperation,
+  ApiSecurity,
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { AuthenticatedGuard } from '../common/guards/authenticated.guard';
-import { UserDto } from './dto/user.dto';
 import { UserEntity } from '../users/user.entity';
 import { ReqUser } from '../common/decorators/user.decorator';
 
 @Controller('auth')
 @ApiTags('Auth')
+@UseInterceptors(ClassSerializerInterceptor)
 export class AuthController {
   constructor(
     @Inject(UsersService) private readonly userService: UsersService,
@@ -31,11 +34,15 @@ export class AuthController {
 
   @Get('user')
   @UseGuards(AuthenticatedGuard)
+  @ApiSecurity('cookie-session')
   @ApiOperation({ summary: 'Получение авторизованного пользователя' })
-  @ApiOkResponse({ description: 'Авторизованный пользователь', type: UserDto })
+  @ApiOkResponse({
+    description: 'Авторизованный пользователь',
+    type: UserEntity,
+  })
   @ApiUnauthorizedResponse({ description: 'Пользователь неавторизован' })
-  async user(@ReqUser() user: UserEntity): Promise<UserDto> {
-    return new UserDto(user);
+  async user(@ReqUser() user: UserEntity): Promise<UserEntity> {
+    return user;
   }
 
   @UseGuards(LoginGuard)
@@ -46,8 +53,8 @@ export class AuthController {
   async login(
     @ReqUser() user: UserEntity,
     @Body() loginDto: LoginDto, // eslint-disable-line @typescript-eslint/no-unused-vars
-  ): Promise<UserDto> {
-    return new UserDto(user);
+  ): Promise<UserEntity> {
+    return user;
   }
 
   @Post('register')
