@@ -4,7 +4,7 @@ export class CreateMeetupDto {
   readonly title: string;
   readonly description: string;
   readonly date: number;
-  readonly cover: string;
+  readonly imageId: number;
   readonly place: string;
   readonly agenda: CreateAgendaItemDto[];
 }

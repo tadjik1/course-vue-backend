@@ -12,6 +12,7 @@ import { UserEntity } from '../users/user.entity';
 import { AbstractSqlConnection } from 'mikro-orm/dist/connections/AbstractSqlConnection';
 import { AgendaItemEntity } from './entities/agenda-item.entity';
 import { CreateMeetupDto } from './dto/create-meetup.dto';
+import { ImageEntity } from '../images/image.entity';
 
 @Injectable()
 export class MeetupsService {
@@ -20,6 +21,9 @@ export class MeetupsService {
 
     @InjectRepository(MeetupEntity)
     private readonly meetupsRepository: EntityRepository<MeetupEntity>,
+
+    @InjectRepository(ImageEntity)
+    private readonly imagesRepository: EntityRepository<ImageEntity>,
   ) {}
 
   async findAll(user?: UserEntity): Promise<MeetupDto[]> {
@@ -77,6 +81,12 @@ export class MeetupsService {
     );
     meetup.agenda.set(meetupEvents);
     meetup.organizer = organizer;
+    if (meetupDto.imageId) {
+      meetup.image = await this.imagesRepository.findOne({
+        id: meetupDto.imageId,
+        user: organizer.id,
+      });
+    }
     await this.meetupsRepository.persistAndFlush(meetup);
     return new MeetupWithAgendaDto(meetup);
   }

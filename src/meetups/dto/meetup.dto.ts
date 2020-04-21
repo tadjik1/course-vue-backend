@@ -4,7 +4,7 @@ export class MeetupDto {
   readonly id: number;
   readonly title: string;
   readonly description: string;
-  readonly cover?: string;
+  readonly imageId?: number;
   readonly date: number | string;
   readonly organizer: number | string;
   readonly place: string;
@@ -15,7 +15,7 @@ export class MeetupDto {
     this.id = meetup.id;
     this.title = meetup.title;
     this.description = meetup.description;
-    this.cover = meetup.cover;
+    this.imageId = meetup.image.id;
     this.date = meetup.date.getTime();
     this.organizer = meetup.organizer.fullname;
     this.place = meetup.place;

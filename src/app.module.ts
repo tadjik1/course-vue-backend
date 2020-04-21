@@ -4,6 +4,7 @@ import { PingModule } from './ping/ping.module';
 import { MeetupsModule } from './meetups/meetups.module';
 import { UsersModule } from './users/users.module';
 import { MikroOrmModule } from 'nestjs-mikro-orm';
+import { ImagesModule } from './images/images.module';
 import config from './mikro-orm.config';
 
 @Module({
@@ -13,6 +14,7 @@ import config from './mikro-orm.config';
     AuthModule,
     MeetupsModule,
     UsersModule,
+    ImagesModule,
   ],
 })
 export class AppModule {}

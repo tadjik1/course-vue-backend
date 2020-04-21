@@ -4,12 +4,14 @@ import {
   ManyToMany,
   ManyToOne,
   OneToMany,
+  OneToOne,
   PrimaryKey,
   Property,
 } from 'mikro-orm';
 import { UserEntity } from '../../users/user.entity';
 import { AgendaItemEntity } from './agenda-item.entity';
 import { CreateMeetupDto } from '../dto/create-meetup.dto';
+import { ImageEntity } from '../../images/image.entity';
 
 @Entity({ tableName: 'meetups' })
 export class MeetupEntity {
@@ -23,16 +25,16 @@ export class MeetupEntity {
   description?: string;
 
   @Property()
-  cover?: string;
-
-  @Property()
   date!: Date;
-
-  @ManyToOne()
-  organizer!: UserEntity;
 
   @Property()
   place!: string;
+
+  @OneToOne()
+  image?: ImageEntity;
+
+  @ManyToOne()
+  organizer!: UserEntity;
 
   @OneToMany(
     () => AgendaItemEntity,
@@ -57,7 +59,6 @@ export class MeetupEntity {
   constructor(meetupDto: Partial<CreateMeetupDto>) {
     this.title = meetupDto.title;
     this.description = meetupDto.description;
-    this.cover = meetupDto.cover;
     this.date = new Date(meetupDto.date);
     this.place = meetupDto.place;
   }
