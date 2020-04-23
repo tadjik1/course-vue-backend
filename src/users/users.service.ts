@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { RegisterUserDto } from '../auth/dto/register-user.dto';
 import { EntityRepository } from 'mikro-orm';
 import { InjectRepository } from 'nestjs-mikro-orm';
@@ -20,6 +20,14 @@ export class UsersService {
   }
 
   async createUser(registerUserDto: RegisterUserDto) {
+    const existUser = await this.usersRepository.findOne({
+      email: registerUserDto.email,
+    });
+    if (existUser) {
+      throw new BadRequestException(
+        'Пользователь с таким Email уже существует',
+      );
+    }
     const user = new UserEntity(registerUserDto);
     await this.usersRepository.persistAndFlush(user);
     return user;

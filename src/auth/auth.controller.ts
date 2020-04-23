@@ -8,6 +8,9 @@ import {
   Get,
   UseInterceptors,
   ClassSerializerInterceptor,
+  UsePipes,
+  ValidationPipe,
+  UnprocessableEntityException,
 } from '@nestjs/common';
 import { LoginDto } from './dto/login.dto';
 import { LoginGuard } from '../common/guards/login.guard';
@@ -27,6 +30,22 @@ import { ReqUser } from '../common/decorators/user.decorator';
 @Controller('auth')
 @ApiTags('Auth')
 @UseInterceptors(ClassSerializerInterceptor)
+@UsePipes(
+  new ValidationPipe({
+    transform: true,
+    whitelist: true,
+    errorHttpStatusCode: 422,
+    exceptionFactory: (errors) => {
+      throw new UnprocessableEntityException(
+        Object.values(errors[0].constraints)[0],
+      );
+    },
+    validationError: {
+      target: true,
+      value: true,
+    },
+  }),
+)
 export class AuthController {
   constructor(
     @Inject(UsersService) private readonly userService: UsersService,

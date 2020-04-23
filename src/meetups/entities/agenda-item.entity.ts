@@ -1,6 +1,7 @@
-import { Cascade, Entity, ManyToOne, PrimaryKey, Property } from 'mikro-orm';
+import { Entity, ManyToOne, PrimaryKey, Property } from 'mikro-orm';
 import { MeetupEntity } from './meetup.entity';
 import { ApiProperty } from '@nestjs/swagger';
+import { AgendaItemsTypes, agendaItemsTypes } from '../agenda-item-types';
 
 @Entity({ tableName: 'agenda_items' })
 export class AgendaItemEntity {
@@ -20,19 +21,10 @@ export class AgendaItemEntity {
   endsAt: string;
 
   @ApiProperty({
-    enum: [
-      'registration',
-      'opening',
-      'talk',
-      'break',
-      'coffee',
-      'closing',
-      'afterparty',
-      'other',
-    ],
+    enum: agendaItemsTypes,
   })
   @Property()
-  type!: 'registration' | 'opening' | 'talk' | 'break' | 'coffee' | 'closing' | 'afterparty' | 'other';
+  type!: AgendaItemsTypes;
 
   @Property()
   title?: string;

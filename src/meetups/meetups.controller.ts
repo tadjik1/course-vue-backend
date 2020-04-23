@@ -9,6 +9,8 @@ import {
   Post,
   Put,
   UseGuards,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { MeetupsService } from './meetups.service';
 import {
@@ -26,6 +28,17 @@ import { CreateMeetupDto } from './dto/create-meetup.dto';
 
 @ApiTags('Meetups')
 @Controller('meetups')
+@UsePipes(
+  new ValidationPipe({
+    transform: true,
+    whitelist: true,
+    errorHttpStatusCode: 422,
+    validationError: {
+      target: true,
+      value: true,
+    },
+  }),
+)
 export class MeetupsController {
   constructor(
     @Inject(MeetupsService) private readonly meetupService: MeetupsService,
@@ -67,9 +80,9 @@ export class MeetupsController {
   async updateMeetup(
     @ReqUser() user: UserEntity,
     @Param('meetupId', ParseIntPipe) meetupId: number,
-    @Body() meetupWithAgendaDto: CreateMeetupDto,
+    @Body() meetupDto: CreateMeetupDto,
   ): Promise<MeetupWithAgendaDto> {
-    return this.meetupService.updateMeetup(meetupId, meetupWithAgendaDto, user);
+    return this.meetupService.updateMeetup(meetupId, meetupDto, user);
   }
 
   @Delete(':meetupId')
