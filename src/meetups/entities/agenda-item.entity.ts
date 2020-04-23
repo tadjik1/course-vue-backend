@@ -1,4 +1,4 @@
-import { Entity, ManyToOne, PrimaryKey, Property } from 'mikro-orm';
+import { Cascade, Entity, ManyToOne, PrimaryKey, Property } from 'mikro-orm';
 import { MeetupEntity } from './meetup.entity';
 import { ApiProperty } from '@nestjs/swagger';
 
@@ -7,7 +7,10 @@ export class AgendaItemEntity {
   @PrimaryKey()
   id: number;
 
-  @ManyToOne()
+  @ManyToOne({
+    entity: () => MeetupEntity,
+    onDelete: 'cascade',
+  })
   meetup!: MeetupEntity;
 
   @Property()

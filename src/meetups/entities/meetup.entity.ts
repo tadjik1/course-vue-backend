@@ -1,4 +1,5 @@
 import {
+  Cascade,
   Collection,
   Entity,
   ManyToMany,
@@ -30,16 +31,19 @@ export class MeetupEntity {
   @Property()
   place!: string;
 
-  @OneToOne()
+  @OneToOne({
+    cascade: [Cascade.PERSIST, Cascade.MERGE, Cascade.REMOVE],
+  })
   image?: ImageEntity;
 
   @ManyToOne()
   organizer!: UserEntity;
 
-  @OneToMany(
-    () => AgendaItemEntity,
-    (agendaEvent) => agendaEvent.meetup,
-  )
+  @OneToMany({
+    entity: () => AgendaItemEntity,
+    mappedBy: (agendaEvent) => agendaEvent.meetup,
+    cascade: [Cascade.PERSIST, Cascade.MERGE, Cascade.REMOVE],
+  })
   agenda = new Collection<AgendaItemEntity>(this);
 
   @ManyToMany({
@@ -47,6 +51,7 @@ export class MeetupEntity {
     pivotTable: 'participation',
     joinColumn: 'meetup_id',
     inverseJoinColumn: 'user_id',
+    cascade: [Cascade.PERSIST, Cascade.MERGE, Cascade.REMOVE],
   })
   participants = new Collection<UserEntity>(this);
 

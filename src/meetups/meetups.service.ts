@@ -22,6 +22,9 @@ export class MeetupsService {
     @InjectRepository(MeetupEntity)
     private readonly meetupsRepository: EntityRepository<MeetupEntity>,
 
+    @InjectRepository(AgendaItemEntity)
+    private readonly agendaRepository: EntityRepository<AgendaItemEntity>,
+
     @InjectRepository(ImageEntity)
     private readonly imagesRepository: EntityRepository<ImageEntity>,
   ) {}
@@ -76,10 +79,9 @@ export class MeetupsService {
   ): Promise<MeetupWithAgendaDto> {
     this.em.merge(organizer);
     const meetup = new MeetupEntity(meetupDto);
-    const meetupEvents = meetupDto.agenda.map(
-      (agendaDto) => new AgendaItemEntity(agendaDto),
+    meetup.agenda.set(
+      meetupDto.agenda.map((agendaDto) => new AgendaItemEntity(agendaDto)),
     );
-    meetup.agenda.set(meetupEvents);
     meetup.organizer = organizer;
     if (meetupDto.imageId) {
       meetup.image = await this.imagesRepository.findOne({
@@ -93,14 +95,41 @@ export class MeetupsService {
 
   async updateMeetup(
     meetupId: number,
-    meetup: MeetupWithAgendaDto,
+    newMeetup: CreateMeetupDto,
+    organizer: UserEntity,
   ): Promise<MeetupWithAgendaDto> {
-    throw new NotImplementedException();
-    return meetup;
+    this.em.merge(organizer);
+    // TODO: not the best solution and not dry
+    const meetup = await this.meetupsRepository.findOne(meetupId, ['agenda']);
+    meetup.title = newMeetup.title;
+    meetup.description = newMeetup.description;
+    meetup.place = newMeetup.place;
+    meetup.date = new Date(newMeetup.date);
+    if (newMeetup.imageId) {
+      meetup.image = await this.imagesRepository.findOne({
+        id: newMeetup.imageId,
+        user: organizer.id,
+      });
+    } else if (meetup.image) {
+      this.imagesRepository.remove(meetup.image);
+      meetup.image = null;
+    }
+    meetup.agenda.getItems().forEach((agendaItem) => {
+      this.agendaRepository.remove(agendaItem);
+    });
+    meetup.agenda.set(
+      newMeetup.agenda.map((agendaDto) => new AgendaItemEntity(agendaDto)),
+    );
+    await this.em.flush();
+    return new MeetupWithAgendaDto(meetup);
   }
 
   async deleteMeetup(meetupId: number) {
-    const meetup = await this.meetupsRepository.findOne(meetupId);
+    const meetup = await this.meetupsRepository.findOne(meetupId, [
+      'agenda',
+      'participants',
+      'image',
+    ]);
     return this.meetupsRepository.removeAndFlush(meetup);
   }
 

@@ -4,10 +4,13 @@ import { MeetupsService } from './meetups.service';
 import { MikroOrmModule } from 'nestjs-mikro-orm';
 import { MeetupEntity } from './entities/meetup.entity';
 import { ImageEntity } from '../images/image.entity';
+import { AgendaItemEntity } from './entities/agenda-item.entity';
 
 @Module({
   imports: [
-    MikroOrmModule.forFeature({ entities: [MeetupEntity, ImageEntity] }),
+    MikroOrmModule.forFeature({
+      entities: [MeetupEntity, AgendaItemEntity, ImageEntity],
+    }),
   ],
   controllers: [MeetupsController],
   providers: [MeetupsService],
