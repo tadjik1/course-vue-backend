@@ -1,7 +1,6 @@
 import { CreateAgendaItemDto } from './create-agenda-item.dto';
 import {
   Allow,
-  IsArray,
   IsDateString,
   IsNotEmpty,
   ValidateNested,

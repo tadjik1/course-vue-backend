@@ -1,8 +1,4 @@
-import {
-  Injectable,
-  NotFoundException,
-  NotImplementedException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { MeetupWithAgendaDto } from './dto/meetup-with-agenda.dto';
 import { MeetupDto } from './dto/meetup.dto';
 import { InjectRepository } from 'nestjs-mikro-orm';

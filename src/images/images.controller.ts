@@ -3,13 +3,11 @@ import {
   ClassSerializerInterceptor,
   Controller,
   Get,
-  HttpException,
   Inject,
   NotFoundException,
   Param,
   ParseIntPipe,
   Post,
-  Req,
   Res,
   UploadedFile,
   UseGuards,
@@ -29,7 +27,6 @@ import {
   ApiSecurity,
   ApiTags,
 } from '@nestjs/swagger';
-import { ApiImplicitFile } from '@nestjs/swagger/dist/decorators/api-implicit-file.decorator';
 import { FileUploadDto } from './dto/file-upload.dto';
 
 @ApiTags('Images')
