@@ -295,7 +295,7 @@ async function seeder() {
       'До встречи!\n' +
       '\n' +
       'https://www.meetup.com/ru-RU/vue-js-moscow/events/263421476/',
-    date: new Date('2018-07-05').toISOString(),
+    date: new Date('2019-08-22').toISOString(),
     place: 'Москва, Офис компании Mail.Ru Group',
   });
   vueMoscowMeetup3.organizer = userEugeneF;
