@@ -6,9 +6,11 @@ import passport from 'passport';
 import session from 'express-session';
 import SQLiteStoreFactory from 'connect-sqlite3';
 import { AppModule } from './app.module';
+import { ConfigService } from '@nestjs/config';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  const configService = app.get<ConfigService>(ConfigService);
 
   app.setGlobalPrefix('api');
 
@@ -16,7 +18,7 @@ async function bootstrap() {
 
   app.use(
     session({
-      secret: 'secret',
+      secret: configService.get('secret'),
       name: 'session',
       resave: false,
       saveUninitialized: false,
@@ -33,7 +35,7 @@ async function bootstrap() {
 
   const options = new DocumentBuilder()
     .setTitle('Meetups API')
-    .setVersion('1.2.0')
+    .setVersion('1.3.0')
     .addSecurity('cookie-session', {
       type: 'apiKey',
       in: 'cookie',
@@ -43,6 +45,9 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup('api', app, document);
 
-  await app.listen(3000);
+  await app.listen(
+    configService.get<number>('port'),
+    configService.get('host'),
+  );
 }
 bootstrap();

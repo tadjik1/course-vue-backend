@@ -1,12 +1,4 @@
-import {
-  Controller,
-  ForbiddenException,
-  Get,
-  Inject,
-  Query,
-} from '@nestjs/common';
-import { EntityManager } from 'mikro-orm';
-import { DatabaseManager } from './database-manager';
+import { Controller, Get, Query, UseGuards } from '@nestjs/common';
 import {
   ApiOkResponse,
   ApiOperation,
@@ -14,6 +6,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { MaintenanceService } from './maintenance.service';
+import { AdminGuard } from '../common/guards/admin.guard';
 
 @ApiTags('maintenance')
 @Controller('maintenance')
@@ -23,16 +16,15 @@ export class MaintenanceController {
   @ApiOperation({ summary: 'Регенерация БД' })
   @ApiQuery({
     name: 'admin_key',
-    description: 'Ключ администратора',
+    description: 'Ключ администрирования',
     example: 'admin_key',
   })
+  @ApiOkResponse({ description: 'ok' })
   @Get('db-refresh')
+  @UseGuards(AdminGuard)
   async refreshDatabase(@Query('admin_key') adminKey: string) {
-    if (adminKey !== 'admin_key') {
-      throw new ForbiddenException('admin_key query parameter is not valid');
-    }
     await this.maintenanceService.dbRefresh();
-    return 'Done';
+    return 'ok';
   }
 
   @ApiOperation({ summary: 'Ping сервера для Health check' })
