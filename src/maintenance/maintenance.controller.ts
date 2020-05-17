@@ -13,16 +13,12 @@ import {
   ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
+import { MaintenanceService } from './maintenance.service';
 
 @ApiTags('maintenance')
 @Controller('maintenance')
 export class MaintenanceController {
-  constructor(
-    private readonly em: EntityManager,
-
-    @Inject('DATABASE_MANAGER')
-    private readonly databaseManager: DatabaseManager,
-  ) {}
+  constructor(private readonly maintenanceService: MaintenanceService) {}
 
   @ApiOperation({ summary: 'Регенерация БД' })
   @ApiQuery({
@@ -35,7 +31,7 @@ export class MaintenanceController {
     if (adminKey !== 'admin_key') {
       throw new ForbiddenException('admin_key query parameter is not valid');
     }
-    await this.databaseManager.refresh(this.em);
+    await this.maintenanceService.dbRefresh();
     return 'Done';
   }
 
@@ -43,6 +39,6 @@ export class MaintenanceController {
   @ApiOkResponse({ description: 'pong' })
   @Get('ping')
   ping() {
-    return 'pong';
+    return this.maintenanceService.ping();
   }
 }

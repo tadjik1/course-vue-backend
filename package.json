@@ -1,6 +1,6 @@
 {
   "name": "course-vue-backend",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "API backend for Meetups - learn.javascript.ru VueJS Course",
   "author": "Grigorii K. Shartsev <me@shgk.me>",
   "private": true,
@@ -26,6 +26,7 @@
     "@nestjs/core": "^7.0.0",
     "@nestjs/passport": "^7.0.0",
     "@nestjs/platform-express": "^7.0.0",
+    "@nestjs/schedule": "^0.4.0",
     "@nestjs/swagger": "^4.4.0",
     "class-transformer": "^0.2.3",
     "class-validator": "^0.12.2",
