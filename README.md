@@ -13,7 +13,7 @@ npm run build
 npm run db:refresh
 
 # Запуск
-npm run start:prod
+npm start
 
 #...или с watch и debug
 npm run start:debug
