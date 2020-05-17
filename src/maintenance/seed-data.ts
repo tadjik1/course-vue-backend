@@ -1,30 +1,23 @@
-import { MikroORM } from 'mikro-orm';
-import config from '../src/mikro-orm.config';
-import { UserEntity } from '../src/users/user.entity';
-import { MeetupEntity } from '../src/meetups/entities/meetup.entity';
-import { AgendaItemEntity } from '../src/meetups/entities/agenda-item.entity';
-import { ImageEntity } from '../src/images/image.entity';
-import * as fs from 'fs';
-import path = require('path');
-
-async function getMikroOrmConnection() {
-  console.log('[seeder] Connecting to DB');
-  return MikroORM.init(config);
-}
+import fs from 'fs';
+import path from 'path';
+import { AnyEntity } from 'mikro-orm';
+import { UserEntity } from '../users/user.entity';
+import { ImageEntity } from '../images/image.entity';
+import { MeetupEntity } from '../meetups/entities/meetup.entity';
+import { AgendaItemEntity } from '../meetups/entities/agenda-item.entity';
 
 function buildImage(filename: string, user: UserEntity): ImageEntity {
   const image = new ImageEntity();
-  image.data = fs.readFileSync(path.join(__dirname, filename));
+  image.data = fs.readFileSync(
+    path.join(__dirname, '../../data/images', filename),
+  );
   image.size = image.data.length;
   image.mimetype = filename.includes('.png') ? 'image/png' : 'image/jpeg';
   image.user = user;
   return image;
 }
 
-async function seeder() {
-  console.log('[seeder] Seeding');
-  const orm = await getMikroOrmConnection();
-
+export function getDataToSeed(): AnyEntity[] {
   const userGrigoriiK = new UserEntity({
     email: 'me@shgk.me',
     fullname: 'Grigorii K. Shartsev',
@@ -45,8 +38,6 @@ async function seeder() {
     fullname: 'Evan You',
     password: 'yyx990803',
   });
-  const users = [userGrigoriiK, userIgorSh, userEugeneF, userEvanYou];
-  orm.em.persist(users);
 
   const mskVueJsMeetup1 = new MeetupEntity({
     title: 'MSK VUE.JS MEETUP #1',
@@ -524,7 +515,9 @@ async function seeder() {
   });
   grigoriiKMeetup.organizer = userGrigoriiK;
 
-  const meetups = [
+  mskVueJsMeetup1.participants.add(userGrigoriiK);
+
+  return [
     mskVueJsMeetup1,
     vueMoscowMeetup1,
     vueMoscowMeetup2,
@@ -532,18 +525,4 @@ async function seeder() {
     vueConfUs,
     grigoriiKMeetup,
   ];
-  orm.em.persist(meetups);
-
-  mskVueJsMeetup1.participants.add(userGrigoriiK);
-
-  await orm.em.flush();
-  await orm.close();
 }
-
-seeder()
-  .then(() => {
-    console.log('[seeder] Seed complete');
-  })
-  .catch((e) => {
-    console.error(e);
-  });
