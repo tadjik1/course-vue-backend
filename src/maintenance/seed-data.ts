@@ -40,25 +40,36 @@ function buildImage(imageFile: ImageFile, user: UserEntity): ImageEntity {
 }
 
 export function getDataToSeed(): AnyEntity[] {
-  const userGrigoriiK = new UserEntity({
-    email: 'me@shgk.me',
-    fullname: 'Grigorii K. Shartsev',
-    password: 'qwerty',
-  });
+  const randomPassword = () =>
+    Math.random()
+      .toFixed(16)
+      .toString()
+      .substring(2);
+
   const userIgorSh = new UserEntity({
     email: 'igor@email',
     fullname: 'Игорь Ш.',
-    password: 'qwerty',
+    password: randomPassword(),
   });
   const userEugeneF = new UserEntity({
     email: 'eugeny@email',
     fullname: 'Eugeny F.',
-    password: 'qwerty',
+    password: randomPassword(),
   });
   const userEvanYou = new UserEntity({
-    email: 'notexistinemail@evanyou.me',
+    email: 'evanyou@email',
     fullname: 'Evan You',
-    password: 'yyx990803',
+    password: randomPassword(),
+  });
+  const userGrigoriiK = new UserEntity({
+    email: 'me@shgk.me',
+    fullname: 'Grigorii K. Shartsev',
+    password: randomPassword(),
+  });
+  const userDemo = new UserEntity({
+    email: 'demo@email',
+    fullname: 'Demo Organizer',
+    password: 'password',
   });
 
   const mskVueJsMeetup1 = new MeetupEntity({
@@ -523,18 +534,82 @@ export function getDataToSeed(): AnyEntity[] {
     }),
   );
 
-  const grigoriiKMeetup = new MeetupEntity({
+  const vueJsCourse = new MeetupEntity({
     title: 'VueJS Course',
-    date: new Date('2020-05-15').toISOString(),
+    date: new Date('2020-06-08').toISOString(),
     place: 'learn.javascript.ru',
     description:
-      'VueJS - современный прогрессивный прагматичный JavaScript фреймворк, подходящий как для постепенной миграции старых проектов, так и для разработки современных SPA приложений.\n' +
+      'Vue.js - прагматичный JavaScript фреймворк, использующийся как для постепенной миграции проектов, так и для разработки современных SPA приложений.\n' +
       '\n' +
-      'На этом курсе мы изучим библиотеку VueJS от основ до сборки SPA приложения, постепенно разрабатывая проект с первого занятия. Включаем к проекту как основные библиотеки экосистемы VueJS, так и другие популярные библиотеки',
+      'Курс посвящён разработке на Vue.js от использования его как небольшой библиотеки до создания современного SPA приложения.\n' +
+      '\n' +
+      'С первого занятия мы будем разрабатывать проект, на примере которого постепенно изучим возможности Vue, основные библиотеки его экосистемы и их применение для решения практических задач.',
   });
-  grigoriiKMeetup.organizer = userGrigoriiK;
+  vueJsCourse.organizer = userGrigoriiK;
 
-  mskVueJsMeetup1.participants.add(userGrigoriiK);
+  const demoMeetup = new MeetupEntity({
+    title: 'Демо-Митап',
+    date: new Date().toISOString(),
+    place: 'Internet',
+    description:
+      'Описание демонстрационного митапа\n' +
+      '\n' +
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+  });
+  demoMeetup.organizer = userDemo;
+
+  demoMeetup.agenda.add(
+    new AgendaItemEntity({
+      startsAt: '09:00',
+      endsAt: '10:00',
+      type: 'opening',
+      title: 'Общий сбор',
+    }),
+    new AgendaItemEntity({
+      startsAt: '10:00',
+      endsAt: '11:00',
+      type: 'registration',
+    }),
+    new AgendaItemEntity({
+      startsAt: '11:00',
+      endsAt: '12:00',
+      type: 'talk',
+      language: 'RU',
+      title: 'Как делать демо доклады?',
+      description:
+        'Вместо доклада проведём демонстрацию доклада.\n' +
+        'Приходите, будет демонстрационно!',
+      speaker: 'Demo, user in Demo Company',
+    }),
+    new AgendaItemEntity({
+      startsAt: '12:00',
+      endsAt: '12:30',
+      type: 'coffee',
+      title: 'Перерыв на кофе',
+    }),
+    new AgendaItemEntity({
+      startsAt: '12:30',
+      endsAt: '13:00',
+      type: 'break',
+      title: 'Перерыв после кофе',
+    }),
+    new AgendaItemEntity({
+      startsAt: '13:00',
+      endsAt: '14:00',
+      type: 'closing',
+    }),
+    new AgendaItemEntity({
+      startsAt: '14:00',
+      endsAt: '23:00',
+      type: 'afterparty',
+    }),
+  );
+
+  /* Participation */
+
+  mskVueJsMeetup1.participants.add(userDemo);
+  vueMoscowMeetup1.participants.add(userDemo);
+  vueJsCourse.participants.add(userDemo);
 
   return [
     mskVueJsMeetup1,
@@ -542,6 +617,6 @@ export function getDataToSeed(): AnyEntity[] {
     vueMoscowMeetup2,
     vueMoscowMeetup3,
     vueConfUs,
-    grigoriiKMeetup,
+    vueJsCourse,
   ];
 }
