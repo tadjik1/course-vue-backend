@@ -17,7 +17,6 @@ export class MaintenanceService {
   ) {
     const dbRefreshCronPattern = this.configService.get('dbRefreshCron');
     if (dbRefreshCronPattern) {
-      console.log(dbRefreshCronPattern);
       const dbRefreshJob = new CronJob(dbRefreshCronPattern, () => {
         return this.dbRefresh();
       });

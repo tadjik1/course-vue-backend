@@ -14,7 +14,6 @@ export class AdminGuard implements CanActivate {
   async canActivate(context: ExecutionContext) {
     const request = context.switchToHttp().getRequest<Request>();
     const correctAdminKey = this.configService.get('adminKey');
-    console.log(request.query);
     if (correctAdminKey && request.query.admin_key !== correctAdminKey) {
       throw new ForbiddenException('admin_key query parameter is not valid');
     }

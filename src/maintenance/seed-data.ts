@@ -8,13 +8,33 @@ import { ImageEntity } from '../images/image.entity';
 import { MeetupEntity } from '../meetups/entities/meetup.entity';
 import { AgendaItemEntity } from '../meetups/entities/agenda-item.entity';
 
-function buildImage(filename: string, user: UserEntity): ImageEntity {
-  const image = new ImageEntity();
+type ImageFile = {
+  data?: Buffer;
+  size?: number;
+  mimetype?: string;
+};
+
+function readImageSync(filename: string): ImageFile {
+  const image: ImageFile = {};
   image.data = fs.readFileSync(
     path.join(__dirname, '../../data/images', filename),
   );
   image.size = image.data.length;
   image.mimetype = filename.includes('.png') ? 'image/png' : 'image/jpeg';
+  return image;
+}
+
+const IMAGES = {
+  MSK_VUEJS_MEETUP: readImageSync('msk-vuejs-meetup.jpeg'),
+  VUEJS_MOSCOW_MEETUP: readImageSync('vuejs-moscow-meetup.jpeg'),
+  VUEJS_CONF_US: readImageSync('vuejs-moscow-meetup.jpeg'),
+};
+
+function buildImage(imageFile: ImageFile, user: UserEntity): ImageEntity {
+  const image = new ImageEntity();
+  image.data = imageFile.data;
+  image.size = imageFile.size;
+  image.mimetype = imageFile.mimetype;
   image.user = user;
   return image;
 }
@@ -51,7 +71,7 @@ export function getDataToSeed(): AnyEntity[] {
     place: 'Москва, офис Voximplant (ул. Мытная 66)',
   });
   mskVueJsMeetup1.organizer = userIgorSh;
-  mskVueJsMeetup1.image = buildImage('msk-vuejs-meetup.jpeg', userIgorSh);
+  mskVueJsMeetup1.image = buildImage(IMAGES.MSK_VUEJS_MEETUP, userIgorSh);
 
   mskVueJsMeetup1.agenda.add(
     new AgendaItemEntity({
@@ -123,10 +143,7 @@ export function getDataToSeed(): AnyEntity[] {
     place: 'Москва, Физтехпарк, офис Acronis',
   });
   vueMoscowMeetup1.organizer = userEugeneF;
-  vueMoscowMeetup1.image = buildImage(
-    './vuejs-moscow-meetup.jpeg',
-    userEugeneF,
-  );
+  vueMoscowMeetup1.image = buildImage(IMAGES.VUEJS_MOSCOW_MEETUP, userEugeneF);
 
   vueMoscowMeetup1.agenda.add(
     new AgendaItemEntity({
@@ -209,7 +226,7 @@ export function getDataToSeed(): AnyEntity[] {
     place: 'Москва, Офис компании Mail.Ru Group',
   });
   vueMoscowMeetup2.organizer = userEugeneF;
-  vueMoscowMeetup2.image = buildImage('vuejs-moscow-meetup.jpeg', userEugeneF);
+  vueMoscowMeetup2.image = buildImage(IMAGES.VUEJS_MOSCOW_MEETUP, userEugeneF);
 
   vueMoscowMeetup2.agenda.add(
     new AgendaItemEntity({
@@ -292,7 +309,7 @@ export function getDataToSeed(): AnyEntity[] {
     place: 'Москва, Офис компании Mail.Ru Group',
   });
   vueMoscowMeetup3.organizer = userEugeneF;
-  vueMoscowMeetup3.image = buildImage('/vuejs-moscow-meetup.jpeg', userEugeneF);
+  vueMoscowMeetup3.image = buildImage(IMAGES.VUEJS_MOSCOW_MEETUP, userEugeneF);
 
   vueMoscowMeetup3.agenda.add(
     new AgendaItemEntity({
@@ -364,7 +381,7 @@ export function getDataToSeed(): AnyEntity[] {
     description: 'ATX. Code. Vue.\n' + 'https://vueconf.us/',
   });
   vueConfUs.organizer = userEvanYou;
-  vueConfUs.image = buildImage('./vue-conf-us.png', userEvanYou);
+  vueConfUs.image = buildImage(IMAGES.VUEJS_CONF_US, userEvanYou);
 
   vueConfUs.agenda.add(
     new AgendaItemEntity({

@@ -17,6 +17,7 @@ export class MaintenanceController {
   @ApiQuery({
     name: 'admin_key',
     description: 'Ключ администрирования',
+    required: false,
     example: 'admin_key',
   })
   @ApiOkResponse({ description: 'ok' })
