@@ -8,7 +8,7 @@ import {
 import { MaintenanceService } from './maintenance.service';
 import { AdminGuard } from '../common/guards/admin.guard';
 
-@ApiTags('maintenance')
+@ApiTags('Maintenance')
 @Controller('maintenance')
 export class MaintenanceController {
   constructor(private readonly maintenanceService: MaintenanceService) {}

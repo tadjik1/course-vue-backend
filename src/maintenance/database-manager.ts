@@ -39,11 +39,26 @@ export class DatabaseManager {
     return this.execute(em, this.createSchemaQuery);
   }
 
-  async refresh(em: EntityManager): Promise<void> {
+  async refresh(em: EntityManager, attempt?: number): Promise<void> {
     // TODO: add transaction here
-    // sore some reason, thi.em.transactional fails with sqlite
-    await this.dropSchema(em);
-    await this.createSchema(em);
-    await this.seed(em);
+    // for some reason, thi.em.transactional fails with sqlite
+    // Not the best solution, but it seems to work
+    try {
+      await this.dropSchema(em);
+      await this.createSchema(em);
+      await this.seed(em);
+    } catch {
+      if (attempt < 10) {
+        return new Promise((resolve, reject) => {
+          setTimeout(() => {
+            this.refresh(em, attempt + 1)
+              .then(resolve)
+              .catch(reject);
+          }, 100);
+        });
+      } else {
+        throw new Error('Error on database refresh');
+      }
+    }
   }
 }
