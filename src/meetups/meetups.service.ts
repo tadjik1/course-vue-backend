@@ -97,6 +97,9 @@ export class MeetupsService {
     this.em.merge(organizer);
     // TODO: not the best solution and not dry
     const meetup = await this.meetupsRepository.findOne(meetupId, ['agenda']);
+    if (!meetup) {
+      throw new NotFoundException();
+    }
     meetup.title = newMeetup.title;
     meetup.description = newMeetup.description;
     meetup.place = newMeetup.place;
@@ -126,7 +129,9 @@ export class MeetupsService {
       'participants',
       'image',
     ]);
-    return this.meetupsRepository.removeAndFlush(meetup);
+    if (meetup) {
+      return this.meetupsRepository.removeAndFlush(meetup);
+    }
   }
 
   async attendMeetup(meetupId: number, user: UserEntity) {
