@@ -20,14 +20,25 @@ function readImageSync(filename: string): ImageFile {
     path.join(__dirname, '../../data/images', filename),
   );
   image.size = image.data.length;
-  image.mimetype = filename.includes('.png') ? 'image/png' : 'image/jpeg';
+  image.mimetype = filename.endsWith('.png') ? 'image/png' : 'image/jpeg';
   return image;
 }
 
 const IMAGES = {
-  MSK_VUEJS_MEETUP: readImageSync('msk-vuejs-meetup.jpeg'),
-  VUEJS_MOSCOW_MEETUP: readImageSync('vuejs-moscow-meetup.jpeg'),
-  VUEJS_CONF_US: readImageSync('vuejs-moscow-meetup.jpeg'),
+  // MSK_VUEJS_MEETUP: readImageSync('msk-vuejs-meetup.jpeg'),
+  // VUEJS_MOSCOW_MEETUP: readImageSync('vuejs-moscow-meetup.jpeg'),
+  // VUEJS_CONF_US: readImageSync('vuejs-moscow-meetup.jpeg'),
+  UNPLASH_1: readImageSync(
+    'anastasia-kuznichenkova-8w_JshgzTjY-unsplash-compressor.jpg',
+  ),
+  UNPLASH_2: readImageSync('antenna-ohNCIiKVT1g-unsplash-compressor.jpg'),
+  UNPLASH_3: readImageSync(
+    'charles-deluvio-wn7dOzUh3Rs-unsplash-compressor.jpg',
+  ),
+  UNPLASH_4: readImageSync(
+    'jakob-dalbjorn-cuKJre3nyYc-unsplash-compressor.jpg',
+  ),
+  UNPLASH_5: readImageSync('neonbrand-1-aA2Fadydc-unsplash-compressor.jpg'),
 };
 
 function buildImage(imageFile: ImageFile, user: UserEntity): ImageEntity {
@@ -82,7 +93,7 @@ export function getDataToSeed(): AnyEntity[] {
     place: 'Москва, офис Voximplant (ул. Мытная 66)',
   });
   mskVueJsMeetup1.organizer = userIgorSh;
-  mskVueJsMeetup1.image = buildImage(IMAGES.MSK_VUEJS_MEETUP, userIgorSh);
+  mskVueJsMeetup1.image = buildImage(IMAGES.UNPLASH_1, userIgorSh);
 
   mskVueJsMeetup1.agenda.add(
     new AgendaItemEntity({
@@ -154,7 +165,7 @@ export function getDataToSeed(): AnyEntity[] {
     place: 'Москва, Физтехпарк, офис Acronis',
   });
   vueMoscowMeetup1.organizer = userEugeneF;
-  vueMoscowMeetup1.image = buildImage(IMAGES.VUEJS_MOSCOW_MEETUP, userEugeneF);
+  vueMoscowMeetup1.image = buildImage(IMAGES.UNPLASH_2, userEugeneF);
 
   vueMoscowMeetup1.agenda.add(
     new AgendaItemEntity({
@@ -237,7 +248,7 @@ export function getDataToSeed(): AnyEntity[] {
     place: 'Москва, Офис компании Mail.Ru Group',
   });
   vueMoscowMeetup2.organizer = userEugeneF;
-  vueMoscowMeetup2.image = buildImage(IMAGES.VUEJS_MOSCOW_MEETUP, userEugeneF);
+  vueMoscowMeetup2.image = buildImage(IMAGES.UNPLASH_3, userEugeneF);
 
   vueMoscowMeetup2.agenda.add(
     new AgendaItemEntity({
@@ -320,7 +331,7 @@ export function getDataToSeed(): AnyEntity[] {
     place: 'Москва, Офис компании Mail.Ru Group',
   });
   vueMoscowMeetup3.organizer = userEugeneF;
-  vueMoscowMeetup3.image = buildImage(IMAGES.VUEJS_MOSCOW_MEETUP, userEugeneF);
+  vueMoscowMeetup3.image = buildImage(IMAGES.UNPLASH_4, userEugeneF);
 
   vueMoscowMeetup3.agenda.add(
     new AgendaItemEntity({
@@ -392,7 +403,7 @@ export function getDataToSeed(): AnyEntity[] {
     description: 'ATX. Code. Vue.\n' + 'https://vueconf.us/',
   });
   vueConfUs.organizer = userEvanYou;
-  vueConfUs.image = buildImage(IMAGES.VUEJS_CONF_US, userEvanYou);
+  vueConfUs.image = buildImage(IMAGES.UNPLASH_5, userEvanYou);
 
   vueConfUs.agenda.add(
     new AgendaItemEntity({
