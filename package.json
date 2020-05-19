@@ -1,13 +1,13 @@
 {
   "name": "course-vue-backend",
-  "version": "1.3.3",
+  "version": "1.3.8",
   "description": "API backend for learn.javascript.ru VueJS Course",
   "author": "Grigorii K. Shartsev <me@shgk.me>",
   "private": true,
   "license": "MIT",
   "scripts": {
     "prebuild": "rimraf dist",
-    "build": "nest build",
+    "build": "nest build && mikro-orm cache:generate && npm run db:refresh",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "node dist/main",
     "start:dev": "nest start --watch --exec \"node -r source-map-support/register\"",
@@ -18,9 +18,7 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "db:refresh": "ts-node src/maintenance/db-refresh-cli.ts",
-    "db:drop-query": "mikro-orm schema:drop --dump",
-    "db:create-query": "mikro-orm schema:create --dump"
+    "db:refresh": "ts-node src/maintenance/db-refresh-cli.ts"
   },
   "dependencies": {
     "@nestjs/common": "^7.0.0",

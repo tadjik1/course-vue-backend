@@ -2,20 +2,25 @@
 
 ## Быстрый старт
 
-```bash
+##### Подготовка
+```shell script
 # Установка зависимостей
 npm install
 
 # Сборка
 npm run build
+```
 
-# Инициализация БД
-npm run db:refresh
+##### Запуск
 
-# Запуск
+```shell script
 npm start
+# или node dist/main.js
+```
 
-#...или с watch и debug
+##### Разработка
+
+```shell script
 npm run start:debug
 ```
 
@@ -39,7 +44,7 @@ SECRET=secret_key
 ## База Данных
 
 Регенерация БД с тестовыми данными:
-```bash
+```shell script
 npm run db:refresh
 ```
 
@@ -47,12 +52,4 @@ npm run db:refresh
 
 ## Документация API
 
-http://localhost:3000/api 
-
-## Known issues
-
-При автоматической генерации схемы БД не добавляются внешние ключи.   
-После изменения схемы требуется перегенерировать и дополнить вручную `data/create-schema.sql`.
-
-https://github.com/mikro-orm/mikro-orm/issues/464  
-https://github.com/knex/knex/issues/3351  
+http://localhost:3000/api
