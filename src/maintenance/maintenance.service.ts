@@ -1,5 +1,10 @@
 import { EntityManager } from 'mikro-orm';
-import { Inject, Injectable } from '@nestjs/common';
+import {
+  Inject,
+  Injectable,
+  InternalServerErrorException,
+  Logger,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { SchedulerRegistry } from '@nestjs/schedule';
 import { CronJob } from 'cron';
@@ -7,6 +12,8 @@ import { DatabaseManager } from './database-manager';
 
 @Injectable()
 export class MaintenanceService {
+  private readonly logger = new Logger('Maintenance');
+
   constructor(
     private readonly em: EntityManager,
     private readonly schedulerRegistry: SchedulerRegistry,
@@ -29,7 +36,12 @@ export class MaintenanceService {
     return 'pong';
   }
 
-  dbRefresh() {
-    return this.databaseManager.refresh(this.em);
+  async dbRefresh() {
+    try {
+      await this.databaseManager.refresh(this.em);
+    } catch (e) {
+      this.logger.error(e.message);
+      throw new InternalServerErrorException('Error on DB refresh');
+    }
   }
 }
