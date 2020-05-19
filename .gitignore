@@ -2,6 +2,9 @@
 db.sqlite3
 sessions.sqlite3
 
+# Mikro ORM temp
+/temp
+
 # compiled output
 /dist
 /node_modules
