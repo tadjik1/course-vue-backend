@@ -41,11 +41,12 @@ export class DatabaseManager {
   }
 
   async refresh(em: EntityManager) {
-    return em.transactional(async (_em) => {
+    return em.fork().transactional(async (_em) => {
       const ctx: Transaction = _em.getTransactionContext();
       await this.dropSchema(_em, ctx);
       await this.createSchema(_em, ctx);
       await this.seed(_em);
+      _em.clear();
       return true;
     });
   }
