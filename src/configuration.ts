@@ -4,4 +4,5 @@ export const configuration = () => ({
   secret: process.env.SECRET ?? 'secret',
   adminKey: process.env.ADMIN_KEY,
   dbRefreshCron: process.env.DB_REFRESH_CRON,
+  clientPath: process.env.CLIENT_PATH,
 });
