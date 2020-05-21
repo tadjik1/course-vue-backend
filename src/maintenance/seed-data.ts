@@ -547,7 +547,7 @@ export function getDataToSeed(): AnyEntity[] {
 
   const vueJsCourse = new MeetupEntity({
     title: 'VueJS Course',
-    date: new Date('2020-06-08').toISOString(),
+    date: new Date('2020-06-15').toISOString(),
     place: 'learn.javascript.ru',
     description:
       'Vue.js - прагматичный JavaScript фреймворк, использующийся как для постепенной миграции проектов, так и для разработки современных SPA приложений.\n' +
