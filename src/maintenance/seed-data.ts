@@ -89,7 +89,7 @@ export function getDataToSeed(): AnyEntity[] {
       'С каждым днем Vue.js становится популярней, все больше разработчиков и компаний делают ставку на данную технологию — 18 июля при поддержке компании Voximplant пройдет митап сообщества MSK VUE.JS, посвященный фреймворку. Спикеры поделятся опытом разработки, участники сообщества обсудят перспективы развития Vue.js.\n' +
       '\n' +
       'https://voximplant.timepad.ru/event/986750/',
-    date: new Date('2019-07-18').toISOString(),
+    date: new Date('2020-05-08').toISOString(),
     place: 'Москва, офис Voximplant (ул. Мытная 66)',
   });
   mskVueJsMeetup1.organizer = userIgorSh;
@@ -161,7 +161,7 @@ export function getDataToSeed(): AnyEntity[] {
       'Для желающим приехать на собственном транспорте, проблем с парковкой не будет. Для тех кто все же не сможет до нас добраться, будет организована трансляция выступлений.\n' +
       '\n' +
       'https://www.meetup.com/ru-RU/vue-js-moscow/events/248462774/',
-    date: new Date('2018-03-22').toISOString(),
+    date: new Date('2020-04-22').toISOString(),
     place: 'Москва, Физтехпарк, офис Acronis',
   });
   vueMoscowMeetup1.organizer = userEugeneF;
@@ -244,7 +244,7 @@ export function getDataToSeed(): AnyEntity[] {
       'https://www.meetup.com/ru-RU/vue-js-moscow/events/251880636/' +
       '\n' +
       'Ссылка на онлайн трансляцию: https://www.youtube.com/watch?v=SiPKxngecQ0',
-    date: new Date('2018-07-05').toISOString(),
+    date: new Date('2020-05-05').toISOString(),
     place: 'Москва, Офис компании Mail.Ru Group',
   });
   vueMoscowMeetup2.organizer = userEugeneF;
@@ -327,7 +327,7 @@ export function getDataToSeed(): AnyEntity[] {
       'До встречи!\n' +
       '\n' +
       'https://www.meetup.com/ru-RU/vue-js-moscow/events/263421476/',
-    date: new Date('2019-08-22').toISOString(),
+    date: new Date('2020-05-12').toISOString(),
     place: 'Москва, Офис компании Mail.Ru Group',
   });
   vueMoscowMeetup3.organizer = userEugeneF;
@@ -398,7 +398,7 @@ export function getDataToSeed(): AnyEntity[] {
 
   const vueConfUs = new MeetupEntity({
     title: 'VueConf US',
-    date: new Date('2020-03-03').toISOString(),
+    date: new Date('2020-05-12').toISOString(),
     place: 'USA, AUSTIN CONVENTION CENTER',
     description: 'ATX. Code. Vue.\n' + 'https://vueconf.us/',
   });
