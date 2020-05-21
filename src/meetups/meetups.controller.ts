@@ -94,6 +94,7 @@ export class MeetupsController {
   }
 
   @Put(':meetupId/participation')
+  @UseGuards(AuthenticatedGuard)
   @ApiOperation({
     summary: 'Добавление текущего пользователя в список участников митапа',
   })
