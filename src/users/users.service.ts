@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { RegisterUserDto } from '../auth/dto/register-user.dto';
-import { EntityRepository } from 'mikro-orm';
+import { EntityManager, EntityRepository } from 'mikro-orm';
 import { InjectRepository } from 'nestjs-mikro-orm';
 import { UserEntity } from './user.entity';
 
@@ -9,9 +9,11 @@ export class UsersService {
   constructor(
     @InjectRepository(UserEntity)
     private readonly usersRepository: EntityRepository<UserEntity>,
+    private readonly em: EntityManager,
   ) {}
 
   async findUserById(userId: number) {
+    this.em.clear();
     return this.usersRepository.findOne(userId);
   }
 
